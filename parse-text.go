@@ -4,7 +4,6 @@ package cirru
 func parseText(line inline, args []interface{}) []interface{} {
   debugPrint("start parsing text", line, args)
   tokens := tokenize(line.line)
-  debugPrint("tokens:", tokens, line.line)
 
   getBuffer := func (data tokenObj) bufferObj {
     return data.buffer
@@ -17,6 +16,7 @@ func parseText(line inline, args []interface{}) []interface{} {
     takeArgs := func () {
       if len(tokens) == 0 {
         if len(args) > 0 {
+          debugPrint("args:", args[0])
           collection = append(collection, args...)
           args = []interface{}{}
         }
@@ -24,8 +24,6 @@ func parseText(line inline, args []interface{}) []interface{} {
     }
 
     takeArgs()
-
-    debugPrint("parsing text", tokens)
 
     for {
       if len(tokens) == 0 {

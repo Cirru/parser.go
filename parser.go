@@ -3,7 +3,8 @@ package cirru
 
 import (
   "strings"
-  "fmt"
+  // "fmt"
+  // "encoding/json"
 )
 
 type fileObj struct {
@@ -13,7 +14,6 @@ type fileObj struct {
 
 func wrapText(text, filename string) (lines []inline) {
   for y, lineText := range strings.Split(text, "\n") {
-    debugPrint("trace:", y, lineText)
     
     charList := []charObj{}
     line := inline{charList}
@@ -34,6 +34,16 @@ func Parse(code, filename string) []interface{} {
 }
 
 func debugPrint(xs ...interface{}) {
-  fmt.Println("")
-  fmt.Println(xs...)
+  // list := []interface{}{}
+  // for _, item := range xs {
+  //   json, err := json.MarshalIndent(item, "", "  ")
+  //   if err != nil {
+  //     panic(err)
+  //   }
+  //   list = append(list, interface{}(string(json)))
+  // }
+  // fmt.Println("")
+  // fmt.Println("")
+  // fmt.Println(xs...)
+  // fmt.Println(list...)
 }

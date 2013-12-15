@@ -2,7 +2,6 @@
 package cirru
 
 import (
-  // "math"
 )
 
 type inline struct {
@@ -26,10 +25,10 @@ func (line inline) getIndent() int {
       break
     }
   }
-  return n / 2
+  return (n + 1) / 2
 }
 
-func (line inline) dedent() {
+func (line inline) dedent() []charObj {
   line.line = line.line[1:]
   if len(line.line) > 0 {
     first := line.line[0]
@@ -37,6 +36,7 @@ func (line inline) dedent() {
       line.line = line.line[1:]
     }
   }
+  return line.line
 }
 
 func (line inline) lineEnd() bool {

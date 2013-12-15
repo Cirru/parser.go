@@ -2,10 +2,20 @@
 package cirru
 
 import (
-  "fmt"
   "testing"
+  "io/ioutil"
 )
 
 func TestParse(t *testing.T) {
-  fmt.Println(Parse("code make", "code"))
+  filename := "./cirru/grammar.cr"
+  code, err := ioutil.ReadFile(filename)
+  if err != nil {
+    panic(err)
+  }
+  codeText := string(code)
+  res := Parse(codeText, filename)
+  if err != nil {
+    panic(err)
+  }
+  debugPrint(res)
 }

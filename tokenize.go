@@ -23,6 +23,9 @@ func tokenize(line []charObj) (tokens []tokenObj) {
 
   digestBuffer := func (asString bool) {
     if len(bufferList) > 0 {
+
+      debugPrint("digestBuffer:", string(bufferList[0].text))
+      
       newToken := tokenObj{}
       if asString {
         newToken.class = "string"
@@ -36,9 +39,10 @@ func tokenize(line []charObj) (tokens []tokenObj) {
   }
 
   addBuffer := func (theChar charObj) {
+
     if len(bufferList) > 0 {
-      buffer := bufferList[0]
-      buffer.text += string(theChar.text)
+      buffer := &bufferList[0]
+      buffer.text = buffer.text + string(theChar.text)
       buffer.end.x = theChar.x
       buffer.end.y = theChar.y
     } else {
@@ -57,6 +61,7 @@ func tokenize(line []charObj) (tokens []tokenObj) {
     }
     char := line[0]
     line = line[1:]
+
     if quoteMode {
       if escapeMode {
         addBuffer(char)
@@ -77,18 +82,22 @@ func tokenize(line []charObj) (tokens []tokenObj) {
         digestBuffer(false)
       case char.isOpenParen():
         digestBuffer(false)
-        newToken := tokenObj{"openParen", bufferList[0]}
+        newToken := tokenObj{}
+        newToken.class = "openParen"
         tokens = append(tokens, newToken)
       case char.isCloseParen():
         digestBuffer(false)
-        newToken := tokenObj{"closeParen", bufferList[0]}
+        newToken := tokenObj{}
+        newToken.class = "closeParen"
         tokens = append(tokens, newToken)
       case char.isDoubleQuote():
         digestBuffer(false)
         quoteMode = true
+      default:
+        addBuffer(char)
       }
     }
   }
   digestBuffer(false)
-  return tokens
+  return
 }
