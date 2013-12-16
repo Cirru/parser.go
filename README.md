@@ -15,6 +15,8 @@ import (
 )
 ```
 
+**This package is still in developing, read code before using**
+
 ### License
 
 MIT

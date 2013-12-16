@@ -6,7 +6,7 @@ type coordObj struct {
 }
 
 type bufferObj struct {
-  text string
+  Text string
   file *fileObj
   start, end coordObj
 }
@@ -23,8 +23,6 @@ func tokenize(line []charObj) (tokens []tokenObj) {
 
   digestBuffer := func (asString bool) {
     if len(bufferList) > 0 {
-
-      debugPrint("digestBuffer:", string(bufferList[0].text))
       
       newToken := tokenObj{}
       if asString {
@@ -42,7 +40,7 @@ func tokenize(line []charObj) (tokens []tokenObj) {
 
     if len(bufferList) > 0 {
       buffer := &bufferList[0]
-      buffer.text = buffer.text + string(theChar.text)
+      buffer.Text = buffer.Text + string(theChar.text)
       buffer.end.x = theChar.x
       buffer.end.y = theChar.y
     } else {

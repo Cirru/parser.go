@@ -3,11 +3,8 @@ package cirru
 
 func parseNested(currLines []inline) []interface{} {
 
-  debugPrint("parsing nested:", currLines)
-
   newLines := []inline{}
   for _, line := range currLines {
-    // this line is strange, array might be copied
     line.line = line.dedent()
     newLines = append(newLines, line)
   }
@@ -15,8 +12,6 @@ func parseNested(currLines []inline) []interface{} {
 }
 
 func parseBlock(currLines []inline) []interface{} {
-
-  debugPrint("parsing block:", currLines)
 
   collection := []interface{}{}
   lines := []inline{}
@@ -45,13 +40,10 @@ func parseBlock(currLines []inline) []interface{} {
     lines = append(lines, line)
   }
   digestBuffer()
-  debugPrint("block return", collection)
   return collection
 }
 
 func parseTree(tree []inline) []interface{} {
-
-  debugPrint("parsing tree", tree)
 
   treeBlock := []inline{}
   for _, line := range tree[1:] {
@@ -60,11 +52,9 @@ func parseTree(tree []inline) []interface{} {
   }
   args := []interface{}{}
   if len(treeBlock) > 0 {
-    debugPrint("begin parseBlock:", treeBlock)
     args = parseBlock(treeBlock)
   }
 
-  debugPrint("args to pass", args)
   newTree := parseText(tree[0], args)
   return newTree
 }
