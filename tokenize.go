@@ -17,12 +17,12 @@ type tokenObj struct {
 }
 
 func tokenize(line []charObj) (tokens []tokenObj) {
-  var bufferList []bufferObj
+  var buffer *bufferObj
   quoteMode := false
   escapeMode := false
 
   digestBuffer := func (asString bool) {
-    if len(bufferList) > 0 {
+    if buffer != nil {
       
       newToken := tokenObj{}
       if asString {
@@ -30,16 +30,15 @@ func tokenize(line []charObj) (tokens []tokenObj) {
       } else {
         newToken.class = "text"
       }
-      newToken.buffer = bufferList[0]
+      newToken.buffer = *buffer
       tokens = append(tokens, newToken)
-      bufferList = []bufferObj{}
+      buffer = nil
     }
   }
 
   addBuffer := func (theChar charObj) {
 
-    if len(bufferList) > 0 {
-      buffer := &bufferList[0]
+    if buffer != nil {
       buffer.Text = buffer.Text + string(theChar.text)
       buffer.end.x = theChar.x
       buffer.end.y = theChar.y
@@ -48,8 +47,7 @@ func tokenize(line []charObj) (tokens []tokenObj) {
       end := coordObj{theChar.x, theChar.y}
       text := string(theChar.text)
       file := theChar.file
-      buffer := bufferObj{text, file, start, end}
-      bufferList = append(bufferList, buffer)
+      buffer = &bufferObj{text, file, start, end}
     }
   }
 
