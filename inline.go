@@ -11,9 +11,8 @@ type inline struct {
 func (line inline) isEmpty() bool {
   if len(line.line) == 0 {
     return true
-  } else {
-    return false
   }
+  return false
 }
 
 func (line inline) getIndent() int {
