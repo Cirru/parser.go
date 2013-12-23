@@ -1,4 +1,8 @@
 
+// `cirru-parser` parses code in Cirru Grammer into a tree.
+// That tree could be later interpreted in the runtime.
+// Cirru is designed for making small scripting tools.
+// Currently, this code is in developing mode.
 package cirru
 
 import (
@@ -28,6 +32,7 @@ func wrapText(text, filename string) (lines []inline) {
   return lines
 }
 
+// return value is a slice mixed with strings and slices
 func Parse(code, filename string) []interface{} {
   lines := wrapText(code, filename)
   return parseBlock(lines)
