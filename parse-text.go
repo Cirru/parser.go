@@ -4,7 +4,7 @@ package cirru
 func parseText(line inline, args []interface{}) []interface{} {
   tokens := tokenize(line.line)
 
-  getBuffer := func (data tokenObj) bufferObj {
+  getBuffer := func (data tokenObj) BufferObj {
     return data.buffer
   }
 

@@ -5,7 +5,8 @@ type coordObj struct {
   x, y int
 }
 
-type bufferObj struct {
+// BufferObj represents a token like thing in Cirru
+type BufferObj struct {
   Text string
   file *fileObj
   start, end coordObj
@@ -13,11 +14,11 @@ type bufferObj struct {
 
 type tokenObj struct {
   class string
-  buffer bufferObj
+  buffer BufferObj
 }
 
 func tokenize(line []charObj) (tokens []tokenObj) {
-  var buffer *bufferObj
+  var buffer *BufferObj
   quoteMode := false
   escapeMode := false
 
@@ -47,7 +48,7 @@ func tokenize(line []charObj) (tokens []tokenObj) {
       end := coordObj{theChar.x, theChar.y}
       text := string(theChar.text)
       file := theChar.file
-      buffer = &bufferObj{text, file, start, end}
+      buffer = &BufferObj{text, file, start, end}
     }
   }
 
