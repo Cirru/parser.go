@@ -11,10 +11,34 @@ Visit http://cirru.org for more.
 
 [![GoDoc](https://godoc.org/github.com/jiyinyiyong/cirru-grammar?status.png)](https://godoc.org/github.com/jiyinyiyong/cirru-grammar)
 
+Package could be run like this when a file named `demo.cr` is given:
+
 ```go
+package main
+
 import (
   "github.com/jiyinyiyong/cirru-grammar"
+  "io/ioutil"
 )
+
+func main() {
+  filename := "demo.cr"
+  codeByte, _ := ioutil.ReadFile(filename)
+  code := string(codeByte)
+  ast := cirru.Parse(code, filename)
+  navigate(ast)
+}
+
+func navigate(tree cirru.List) {
+  for _, item := range tree {
+    if token, ok := item.(cirru.Token); ok {
+      println(token.Text)
+    }
+    if list, ok := item.(cirru.List); ok {
+      navigate(list)
+    }
+  }
+}
 ```
 
 **This package is still in developing, read code before using**

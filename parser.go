@@ -16,6 +16,10 @@ type fileObj struct {
   path string
 }
 
+// List is an abstraction on []interface{} of cirru
+// List consists of Token and List
+type List []interface{}
+
 func wrapText(text, filename string) (lines []inline) {
   for y, lineText := range strings.Split(text, "\n") {
     
@@ -33,13 +37,13 @@ func wrapText(text, filename string) (lines []inline) {
 }
 
 // Parse returns value is a slice mixed with strings and slices
-func Parse(code, filename string) []interface{} {
+func Parse(code, filename string) List {
   lines := wrapText(code, filename)
   return parseBlock(lines)
 }
 
 func debugPrint(xs ...interface{}) {
-  list := []interface{}{}
+  list := List{}
   for _, item := range xs {
     json, err := json.MarshalIndent(item, "", "  ")
     if err != nil {

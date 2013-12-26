@@ -1,22 +1,22 @@
 
 package cirru
 
-func parseText(line inline, args []interface{}) []interface{} {
+func parseText(line inline, args List) List {
   tokens := tokenize(line.line)
 
-  getBuffer := func (data tokenObj) BufferObj {
+  getBuffer := func (data tokenObj) Token {
     return data.buffer
   }
 
-  var build func (byDollar bool) []interface{}
-  build = func (byDollar bool) []interface{} {
-    collection := []interface{}{}
+  var build func (byDollar bool) List
+  build = func (byDollar bool) List {
+    collection := List{}
 
     takeArgs := func () {
       if len(tokens) == 0 {
         if len(args) > 0 {
           collection = append(collection, args...)
-          args = []interface{}{}
+          args = List{}
         }
       }
     }
