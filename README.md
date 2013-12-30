@@ -2,14 +2,14 @@
 Cirru Grammar
 ------
 
-[Cirru parser][parser] in Go.
-[parser]: https://github.com/jiyinyiyong/cirru-parser
+[Cirru Parser][parser] implemented in Go.
+[parser]: https://github.com/Cirru/cirru-parser
 
 Visit http://cirru.org for more.
 
 ### Usage
 
-[![GoDoc](https://godoc.org/github.com/jiyinyiyong/cirru-grammar?status.png)](https://godoc.org/github.com/jiyinyiyong/cirru-grammar)
+[![GoDoc](https://godoc.org/github.com/Cirru/cirru-grammar?status.png)](https://godoc.org/github.com/Cirru/cirru-grammar)
 
 Package could be run like this when a file named `demo.cr` is given:
 
@@ -17,7 +17,7 @@ Package could be run like this when a file named `demo.cr` is given:
 package main
 
 import (
-  "github.com/jiyinyiyong/cirru-grammar"
+  "github.com/Cirru/cirru-grammar"
   "io/ioutil"
 )
 
