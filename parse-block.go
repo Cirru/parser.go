@@ -15,17 +15,26 @@ func parseBlock(currLines []inline) List {
 
   collection := List{}
   lines := []inline{}
+  count := 0
+  var empty interface{}
+  track := make(chan bool)
 
   digestBuffer := func () {
     if len(lines) > 0 {
-      line := lines[0]
-      var tree List
-      if len(collection) == 0 && line.getIndent() > 0 {
-        tree = parseNested(lines)
-      } else {
-        tree = parseTree(lines)
-      }
-      collection = append(collection, tree)
+      collection = append(collection, empty)
+
+      go func(lines []inline, length int) {
+        line := lines[0]
+        var tree List
+        if len(collection) == 0 && line.getIndent() > 0 {
+          tree = parseNested(lines)
+        } else {
+          tree = parseTree(lines)
+        }
+        collection[length - 1] = tree
+        track <- true
+      }(lines, len(collection))
+
       lines = []inline{}
     }
   }
@@ -40,6 +49,15 @@ func parseBlock(currLines []inline) List {
     lines = append(lines, line)
   }
   digestBuffer()
+
+  for {
+    <- track
+    count += 1
+    if count == len(collection) {
+      break
+    }
+  }
+
   return collection
 }
 
