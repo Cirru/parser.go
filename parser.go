@@ -27,6 +27,9 @@ func wrapText(text, filename string) (lines []inline) {
     line := inline{charList}
     file := &fileObj{text, filename}
     lineText = strings.TrimRight(lineText, " ")
+    if len(lineText) == 0 {
+      continue
+    }
     for x, charText := range strings.Split(lineText, "") {
       char := charObj{x, y, rune(charText[0]), file}
       line.line = append(line.line, char)
@@ -37,9 +40,12 @@ func wrapText(text, filename string) (lines []inline) {
 }
 
 // Parse returns value is a slice mixed with strings and slices
-func Parse(code, filename string) List {
+func Parse(code, filename string) (ret List) {
   lines := wrapText(code, filename)
-  return parseBlock(lines)
+  if len(lines) != 0 {
+    ret = parseBlock(lines)
+  }
+  return
 }
 
 func debugPrint(xs ...interface{}) {
