@@ -3,15 +3,15 @@ Cirru Grammar
 ------
 
 [Cirru Parser][parser] implemented in Go.
-[parser]: https://github.com/Cirru/cirru-parser
+[parser]: https://github.com/Cirru/cirru-parser.coffee
 
 Visit http://cirru.org for more.
 
 ### Usage
 
-[![GoDoc](https://godoc.org/github.com/Cirru/cirru-grammar?status.png)](https://godoc.org/github.com/Cirru/cirru-grammar)
+[![GoDoc](https://godoc.org/github.com/Cirru/cirru-parser.go?status.png)](https://godoc.org/github.com/Cirru/cirru-parser.go)
 
-Package could be run like this when a file named `demo.cr` is given:
+Package could be run like this when a file named `demo.cirru` is given:
 
 ```go
 package main
@@ -22,7 +22,7 @@ import (
 )
 
 func main() {
-  filename := "demo.cr"
+  filename := "demo.cirru"
   codeByte, _ := ioutil.ReadFile(filename)
   code := string(codeByte)
   ast := cirru.Parse(code, filename)

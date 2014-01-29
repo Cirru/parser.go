@@ -7,7 +7,7 @@ import (
 )
 
 func TestParse(t *testing.T) {
-  filename := "./cirru/grammar.cr"
+  filename := "./cirru/grammar.cirru"
   code, err := ioutil.ReadFile(filename)
   if err != nil {
     panic(err)
