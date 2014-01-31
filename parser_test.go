@@ -13,9 +13,6 @@ func TestParse(t *testing.T) {
     panic(err)
   }
   codeText := string(code)
-  res := Parse(codeText, filename)
-  if err != nil {
-    panic(err)
-  }
+  res := ParseShort(codeText, filename)
   debugPrint(res)
 }

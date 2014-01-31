@@ -11,6 +11,10 @@ Visit http://cirru.org for more.
 
 [![GoDoc](https://godoc.org/github.com/Cirru/cirru-parser.go?status.png)](https://godoc.org/github.com/Cirru/cirru-parser.go)
 
+* `func Parse(code, filename string) (ret List)`: returns syntax tree of code.
+
+* `func ParseShort(code, filename string) (ret List)`: returns tree without file infos.
+
 Package could be run like this when a file named `demo.cirru` is given:
 
 ```go

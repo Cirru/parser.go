@@ -4,10 +4,6 @@ package cirru
 func parseText(line inline, args List) List {
   tokens := tokenize(line.line)
 
-  getBuffer := func (data tokenObj) Token {
-    return data.buffer
-  }
-
   var build func (byDollar bool) List
   build = func (byDollar bool) List {
     collection := List{}
@@ -50,12 +46,12 @@ func parseText(line inline, args List) List {
       tokens = tokens[1:]
       switch cursor.class {
       case "string":
-        collection = append(collection, getBuffer(cursor))
+        collection = append(collection, cursor.buffer)
       case "text":
         if cursor.buffer.Text == "$" {
           collection = append(collection, build(true))
         } else {
-          collection = append(collection, getBuffer(cursor))
+          collection = append(collection, cursor.buffer)
         }
       case "openParen":
         collection = append(collection, build(false))
