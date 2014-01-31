@@ -15,7 +15,21 @@ func parseText(line inline, args List) List {
     takeArgs := func () {
       if len(tokens) == 0 {
         if len(args) > 0 {
-          collection = append(collection, args...)
+          for _, line := range args {
+            if list, ok := line.(List); ok {
+              dispersive := false
+              if word, ok := list[0].(Token); ok {
+                if word.Text == "," {
+                  dispersive = true
+                }
+              }
+              if dispersive {
+                collection = append(collection, list[1:]...)
+              } else {
+                collection = append(collection, list)
+              }
+            }
+          }
           args = List{}
         }
       }
