@@ -51,11 +51,11 @@ func Parse(code, filename string) (ret List) {
 func debugPrint(xs ...interface{}) {
   list := List{}
   for _, item := range xs {
-    json, err := json.MarshalIndent(item, "", "  ")
+    jsonContent, err := json.MarshalIndent(item, "", "  ")
     if err != nil {
       panic(err)
     }
-    list = append(list, interface{}(string(json)))
+    list = append(list, interface{}(string(jsonContent)))
   }
   fmt.Println("")
   fmt.Println("")

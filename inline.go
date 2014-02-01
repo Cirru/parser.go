@@ -27,7 +27,7 @@ func (line inline) getIndent() int {
   return (n + 1) / 2
 }
 
-func (line inline) dedent() []charObj {
+func (line inline) outdent() []charObj {
   line.line = line.line[1:]
   if len(line.line) > 0 {
     first := line.line[0]

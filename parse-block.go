@@ -5,7 +5,7 @@ func parseNested(currLines []inline) List {
 
   newLines := []inline{}
   for _, line := range currLines {
-    line.line = line.dedent()
+    line.line = line.outdent()
     newLines = append(newLines, line)
   }
   return parseBlock(newLines)
@@ -16,7 +16,7 @@ func parseBlock(currLines []inline) List {
   collection := List{}
   lines := []inline{}
   count := 0
-  var empty interface{}
+  empty := List{}
   track := make(chan bool)
 
   digestBuffer := func () {
@@ -26,7 +26,7 @@ func parseBlock(currLines []inline) List {
       go func(lines []inline, length int) {
         line := lines[0]
         var tree List
-        if len(collection) == 0 && line.getIndent() > 0 {
+        if (length - 1) == 0 && line.getIndent() > 0 {
           tree = parseNested(lines)
         } else {
           tree = parseTree(lines)
@@ -65,7 +65,7 @@ func parseTree(tree []inline) List {
 
   treeBlock := []inline{}
   for _, line := range tree[1:] {
-    line.line = line.dedent()
+    line.line = line.outdent()
     treeBlock = append(treeBlock, line)
   }
   args := List{}

@@ -49,7 +49,8 @@ func parseText(line inline, args List) List {
         collection = append(collection, cursor.buffer)
       case "text":
         if cursor.buffer.Text == "$" {
-          collection = append(collection, build(true))
+          afterDallar := build(true)
+          collection = append(collection, afterDallar)
         } else {
           collection = append(collection, cursor.buffer)
         }
