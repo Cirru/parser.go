@@ -28,21 +28,21 @@ func (p *Parser) Read(c rune) {
     p.state.countLetter()
   }
   switch c {
-  case NewLine: p.readNewline()
+  case NewLine: p.readNewline(c)
   case Space: p.readSpace(c)
-  case ParenLeft: p.readParenLeft()
-  case ParenRight: p.readParenRight()
-  case Quote: p.readQuote()
-  case Backslash: p.readBackslash()
+  case ParenLeft: p.readParenLeft(c)
+  case ParenRight: p.readParenRight(c)
+  case Quote: p.readQuote(c)
+  case Backslash: p.readBackslash(c)
   default: p.readCode(c)
   }
 }
 
-func (p *Parser) readNewline() {
+func (p *Parser) readNewline(c rune) {
   s := p.state
   switch s.name {
   case stateIndent: s.dropEmptyLine()
-  case stateString: panic("unexpacted NewLine in string")
+  case stateString: panic("unexpected NewLine in string")
   case stateEscape: panic("unexpected NewLine in escape")
   case stateToken: s.completeBuffer()
   }
@@ -51,30 +51,54 @@ func (p *Parser) readNewline() {
 func (p *Parser) readSpace(c rune) {
   s := p.state
   switch s.name {
-  case stateIndent: p.state.addIndentation()
+  case stateIndent: s.addIndentation()
   case stateString: p.readCode(c)
   case stateEscape: panic("no need to use Space in escape")
-  case stateToken: p.state.completeBuffer()
+  case stateToken: s.completeBuffer()
   }
 }
 
 func (p *Parser) readCode(c rune) {
-  println("normal char")
+  s := p.state
+  switch s.name {
+  case stateIndent: s.handleIndentation()
+  case stateString: s.addBuffer(c)
+  case stateEscape: s.addBuffer(c)
+  case stateToken: s.addBuffer(c)
+  }
 }
 
-func (p *Parser) readParenLeft() {
-  println("ParenLeft")
+func (p *Parser) readParenLeft(c rune) {
+  s := p.state
+  switch s.name {
+  case stateIndent:
+    s.handleIndentation()
+    s.pushStack()
+  case stateString: s.addBuffer(c)
+  case stateEscape: s.addBuffer(c)
+  case stateToken:
+    s.completeBuffer()
+    s.pushStack()
+  }
 }
 
-func (p *Parser) readParenRight() {
-  println("ParenRight")
+func (p *Parser) readParenRight(c rune) {
+  s := p.state
+  switch s.name {
+  case stateIndent: panic("unexpected ParenRight at head")
+  case stateString: s.addBuffer(c)
+  case stateEscape: s.addBuffer(c)
+  case stateToken:
+    s.completeBuffer()
+    s.popStack()
+  }
 }
 
-func (p *Parser) readQuote() {
+func (p *Parser) readQuote(c rune) {
   println("read Quote")
 }
 
-func (p *Parser) readBackslash() {
+func (p *Parser) readBackslash(c rune) {
   println("read Backslash")
 }
 

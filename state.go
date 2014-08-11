@@ -65,17 +65,58 @@ func (s *state) addIndentation() {
   s.level += 1
 }
 
+func (s *state) startString() {
+  s.name = stateString
+  s.buffer = Token{"", s.x, s.y, s.x, s.y}
+}
+
+func (s *state) completeString() {
+  buffer := s.buffer
+  buffer.ex = s.x
+  buffer.ey = s.y
+  if len(buffer.text) > 0 {
+    s.cursor.push(buffer)
+  }
+  s.startString()
+}
+
+func (s *state) pushStack() {
+  s.name = stateToken
+  list := []interface{}{}
+  expr := Expression{list}
+  s.history = append(s.history, s.cursor)
+  s.cursor = expr
+}
+
+func (s *state) popStack() {
+  s.name = stateToken
+  endIndex := len(s.history) - 1
+  if expr, ok := s.history[endIndex].(Expression); ok {
+    s.cursor = expr
+  } else {
+    panic("got wrong thing from history")
+  }
+  s.history = s.history[:endIndex]
+}
+
 func (s *state) handleIndentation() {
-}
-
-func (s *state) indent(n int) {
-  if n <= 0 {
-    panic("n <= 0")
+  indented := len(s.buffer.text)
+  if indented > s.level {
+    diff := indented - s.level
+    for ; diff > 0; diff -= 2 {
+      s.pushStack()
+      if diff == 1 {
+        panic("odd indentation not valid")
+      }
+    }
+  } else if indented < s.level {
+    diff := s.level - indented
+    for ; diff > 0; diff -= 2 {
+      s.popStack()
+      if diff == 1 {
+        panic("odd indentation not valid")
+      }
+    }
   }
-}
-
-func (s *state) unindent(n int) {
-  if n >= 0 {
-    panic("n >= 0")
-  }
+  s.level = indented
 }
