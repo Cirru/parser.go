@@ -5,3 +5,7 @@ type Token struct {
   text string
   x, y, ex, ey int
 }
+
+func (t *Token) empty() {
+  t.text = ""
+}

@@ -4,24 +4,24 @@ package cirru
 import "fmt"
 
 type Parser struct {
-  Done bool
-  AST []Expression
-  state state
+  ast *[]Expression
+  state *state
 }
 
 func NewParser() Parser {
-  list := []Expression{}
-  history := []interface{}{}
-  first := Expression{}
-  list = append(list, first)
-  mockToken := Token{"", 0, 0, 0, 0}
-  initial := state{stateIndent, mockToken, 0, 0, 0, history, first}
-  p := Parser{false, list, initial}
+  list := &[]Expression{}
+  history := &[]interface{}{}
+  emptyList := &[]interface{}{}
+  first := &Expression{emptyList}
+  *list = append(*list, *first)
+  mockToken := &Token{"", 1, 1, 1, 1}
+  initial := &state{stateIndent, mockToken, 0, 1, 1, history, first}
+  p := Parser{list, initial}
   return p
 }
 
 func (p *Parser) Read(c rune) {
-  // fmt.Printf("\n%v", p.state)
+  fmt.Printf("\n%v %s\n", p.state, string(c))
   if c == NewLine {
     p.state.countNewline()
   } else {
@@ -44,7 +44,9 @@ func (p *Parser) readNewline(c rune) {
   case stateIndent: s.dropEmptyLine()
   case stateString: panic("unexpected NewLine in string")
   case stateEscape: panic("unexpected NewLine in escape")
-  case stateToken: s.completeBuffer()
+  case stateToken:
+    s.completeToken()
+    s.beginNewline()
   }
 }
 
@@ -54,17 +56,18 @@ func (p *Parser) readSpace(c rune) {
   case stateIndent: s.addIndentation()
   case stateString: p.readCode(c)
   case stateEscape: panic("no need to use Space in escape")
-  case stateToken: s.completeBuffer()
+  case stateToken: s.completeToken()
   }
 }
 
 func (p *Parser) readCode(c rune) {
   s := p.state
   switch s.name {
-  case stateIndent: s.handleIndentation()
-  case stateString: s.addBuffer(c)
-  case stateEscape: s.addBuffer(c)
-  case stateToken: s.addBuffer(c)
+  case stateIndent:
+    s.handleIndentation()
+    s.beginToken()
+    s.addBuffer(c)
+  case stateString, stateEscape, stateToken: s.addBuffer(c)
   }
 }
 
@@ -74,10 +77,9 @@ func (p *Parser) readParenLeft(c rune) {
   case stateIndent:
     s.handleIndentation()
     s.pushStack()
-  case stateString: s.addBuffer(c)
-  case stateEscape: s.addBuffer(c)
+  case stateString, stateEscape: s.addBuffer(c)
   case stateToken:
-    s.completeBuffer()
+    s.completeToken()
     s.pushStack()
   }
 }
@@ -86,22 +88,41 @@ func (p *Parser) readParenRight(c rune) {
   s := p.state
   switch s.name {
   case stateIndent: panic("unexpected ParenRight at head")
-  case stateString: s.addBuffer(c)
-  case stateEscape: s.addBuffer(c)
+  case stateString, stateEscape: s.addBuffer(c)
   case stateToken:
-    s.completeBuffer()
+    s.completeToken()
     s.popStack()
   }
 }
 
 func (p *Parser) readQuote(c rune) {
-  println("read Quote")
+  s := p.state
+  switch s.name {
+  case stateIndent:
+    s.handleIndentation()
+    s.beginString()
+  case stateString:
+    s.completeString()
+  case stateEscape:
+    s.addBuffer(c)
+  case stateToken:
+    panic("supposed to have space here")
+  }
 }
 
 func (p *Parser) readBackslash(c rune) {
-  println("read Backslash")
+  s := p.state
+  switch s.name {
+  case stateIndent:
+    s.handleIndentation()
+    s.beginToken()
+  case stateString:
+    s.completeSlash()
+  case stateEscape, stateToken:
+    s.addBuffer(c)
+  }
 }
 
 func (p *Parser) GetAst() {
-  fmt.Printf("%v\n\n", p.AST)
+  fmt.Printf("%v\n\n", p.ast)
 }

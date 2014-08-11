@@ -2,9 +2,9 @@
 package cirru
 
 type Expression struct {
-  list []interface{}
+  list *[]interface{}
 }
 
 func (e *Expression) push(child interface{}) {
-  e.list = append(e.list, child)
+  *e.list = append(*e.list, child)
 }

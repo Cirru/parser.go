@@ -12,3 +12,12 @@ const Backslash = rune('\\')
 
 const Comma = rune(',')
 const Dollar = rune('$')
+
+type stateName int
+
+const (
+  stateIndent stateName = iota
+  stateToken
+  stateString
+  stateEscape
+)
