@@ -16,4 +16,5 @@ func main() {
     parser.Read(rune(c))
   }
   parser.GetAst()
+  parser.FormatAst()
 }

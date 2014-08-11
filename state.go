@@ -27,6 +27,7 @@ func (s *state) dropEmptyLine() {
 }
 
 func (s *state) beginToken() {
+  s.name = stateToken
   buffer := s.buffer
   buffer.x = s.x
   buffer.ex = s.x
@@ -40,15 +41,13 @@ func (s *state) completeToken() {
   buffer.ex = s.x
   buffer.ey = s.y
   if len(buffer.text) > 0 {
-    (*s.cursor).push(buffer)
+    (*s.cursor).push(*buffer)
   }
   s.beginToken()
 }
 
 func (s *state) addBuffer(c rune) {
-  buffer := s.buffer
-  char := string(c)
-  buffer.text += char
+  s.buffer.add(c)
 }
 
 func (s *state) addIndentation() {
@@ -64,7 +63,7 @@ func (s *state) completeString() {
   buffer := s.buffer
   buffer.ex, buffer.ey = s.x, s.y
   if len(buffer.text) > 0 {
-    s.cursor.push(buffer)
+    s.cursor.push(*buffer)
   }
   s.beginToken()
 }

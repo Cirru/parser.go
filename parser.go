@@ -106,7 +106,8 @@ func (p *Parser) readQuote(c rune) {
   case stateEscape:
     s.addBuffer(c)
   case stateToken:
-    panic("supposed to have space here")
+    s.completeToken()
+    s.beginString()
   }
 }
 
@@ -124,5 +125,11 @@ func (p *Parser) readBackslash(c rune) {
 }
 
 func (p *Parser) GetAst() {
-  fmt.Printf("%v\n\n", p.ast)
+  fmt.Printf("%v\n\n", *(p.ast))
+}
+
+func (p *Parser) FormatAst() {
+  for _, expr := range(*p.ast) {
+    println(expr.format())
+  }
 }
