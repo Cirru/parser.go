@@ -16,11 +16,9 @@ func (e *Expression) insert(child *Expression) {
 func (e *Expression) format() (out string) {
   out += "("
   for _, child := range(*e.list) {
-    if expr, ok := child.(Expression); ok {
-      println("found expr")
+    if expr, ok := child.(*Expression); ok {
       out += expr.format()
     } else if token, ok := child.(Token); ok {
-      println("found token")
       out += "'"
       out += token.format()
       out += "' "

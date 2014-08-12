@@ -13,6 +13,7 @@ func NewParser() Parser {
   history := &[]interface{}{}
   emptyList := &[]interface{}{}
   first := &Expression{emptyList}
+  *history = append(*history, first)
   *list = append(*list, first)
   mockToken := &Token{"", 1, 1, 1, 1}
   initial := &state{stateIndent, mockToken, 0, 1, 1, history, first}
@@ -130,7 +131,6 @@ func (p *Parser) GetAst() {
 
 func (p *Parser) FormatAst() {
   for _, expr := range(*p.ast) {
-    println("loop")
     fmt.Printf("%v", *expr)
     println(expr.format())
   }
