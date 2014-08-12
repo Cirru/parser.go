@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-  b, err := ioutil.ReadFile("../cirru/spaces.cirru")
+  b, err := ioutil.ReadFile("../cirru/parentheses.cirru")
   if err != nil {
     panic(err)
   }
@@ -15,6 +15,7 @@ func main() {
   for _, c := range b {
     parser.Read(rune(c))
   }
+  parser.Complete()
   parser.GetAst()
   parser.FormatAst()
 }

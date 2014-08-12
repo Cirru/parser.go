@@ -9,6 +9,10 @@ func (e *Expression) push(child interface{}) {
   *e.list = append(*e.list, child)
 }
 
+func (e *Expression) insert(child *Expression) {
+  *e.list = append(*e.list, child)
+}
+
 func (e *Expression) format() (out string) {
   out += "("
   for _, child := range(*e.list) {

@@ -4,16 +4,16 @@ package cirru
 import "fmt"
 
 type Parser struct {
-  ast *[]Expression
+  ast *[]*Expression
   state *state
 }
 
 func NewParser() Parser {
-  list := &[]Expression{}
+  list := &[]*Expression{}
   history := &[]interface{}{}
   emptyList := &[]interface{}{}
   first := &Expression{emptyList}
-  *list = append(*list, *first)
+  *list = append(*list, first)
   mockToken := &Token{"", 1, 1, 1, 1}
   initial := &state{stateIndent, mockToken, 0, 1, 1, history, first}
   p := Parser{list, initial}
@@ -130,6 +130,12 @@ func (p *Parser) GetAst() {
 
 func (p *Parser) FormatAst() {
   for _, expr := range(*p.ast) {
+    println("loop")
+    fmt.Printf("%v", *expr)
     println(expr.format())
   }
+}
+
+func (p *Parser) Complete() {
+  p.state.completeToken()
 }

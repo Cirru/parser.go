@@ -38,10 +38,9 @@ func (s *state) beginToken() {
 
 func (s *state) completeToken() {
   buffer := s.buffer
-  buffer.ex = s.x
-  buffer.ey = s.y
+  buffer.ex, buffer.ey = s.x, s.y
   if len(buffer.text) > 0 {
-    (*s.cursor).push(*buffer)
+    s.cursor.push(*buffer)
   }
   s.beginToken()
 }
@@ -69,41 +68,45 @@ func (s *state) completeString() {
 }
 
 func (s *state) pushStack() {
+  println("pushStack")
   s.name = stateToken
   list := &[]interface{}{}
   expr := &Expression{list}
   *s.history = append(*s.history, s.cursor)
+  println(len(*s.cursor.list))
+  s.cursor.insert(expr)
+  println(len(*s.cursor.list))
   s.cursor = expr
 }
 
 func (s *state) popStack() {
-  s.name = stateToken
   endIndex := len(*s.history) - 1
-  if expr, ok := (*s.history)[endIndex].(Expression); ok {
-    s.cursor = &expr
+  if expr, ok := (*s.history)[endIndex].(*Expression); ok {
+    s.name = stateToken
+    s.cursor = expr
+    *s.history = (*s.history)[:endIndex]
   } else {
     panic("got wrong thing from history")
   }
-  *s.history = (*s.history)[:endIndex]
 }
 
 func (s *state) handleIndentation() {
   indented := len(s.buffer.text)
   if indented > s.level {
     diff := indented - s.level
+    if diff % 2 == 1 {
+        panic("odd indentation not valid")
+    }
     for ; diff > 0; diff -= 2 {
       s.pushStack()
-      if diff == 1 {
-        panic("odd indentation not valid")
-      }
     }
   } else if indented < s.level {
     diff := s.level - indented
-    for ; diff > 0; diff -= 2 {
-      s.popStack()
-      if diff == 1 {
+    if diff % 2 == 1 {
         panic("odd indentation not valid")
-      }
+    }
+    for ; diff >= 0; diff -= 2 {
+      s.popStack()
     }
   }
   s.level = indented
