@@ -54,8 +54,7 @@ func (p *Parser) readNewline(c rune) {
 func (p *Parser) readSpace(c rune) {
   s := p.state
   switch s.name {
-  case stateIndent: s.addIndentation()
-  case stateString: p.readCode(c)
+  case stateIndent, stateString: s.addBuffer(c)
   case stateEscape: panic("no need to use Space in escape")
   case stateToken: s.completeToken()
   }

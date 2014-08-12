@@ -49,10 +49,6 @@ func (s *state) addBuffer(c rune) {
   s.buffer.add(c)
 }
 
-func (s *state) addIndentation() {
-  s.level += 1
-}
-
 func (s *state) beginString() {
   s.name = stateString
   s.buffer = &Token{"", s.x, s.y, s.x, s.y}
