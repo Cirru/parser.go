@@ -1,13 +1,14 @@
 
 package cirru
 
-import "fmt"
+// import "fmt"
 
 type Parser struct {
   ast *Expression
   state *state
 }
 
+// Creates new parser which contains the following methods.
 func NewParser() Parser {
   emptyList := &[]interface{}{}
   firstExpr := &Expression{emptyList}
@@ -25,6 +26,7 @@ func NewParser() Parser {
   return p
 }
 
+// Takes each character in rune type, and triggers parser.
 func (p *Parser) Read(c rune) {
   s := p.state
   // safeChar := fmt.Sprintf("%q", c)
@@ -143,16 +145,16 @@ func (p *Parser) readBackslash(c rune) {
   }
 }
 
-func (p *Parser) GetAst() {
-  fmt.Printf("%v\n\n", *(p.ast))
-}
-
+// Tell the parser it's completed.
+// Call this method when files reach the end.
 func (p *Parser) Complete() {
   p.state.completeToken()
   p.ast.resolveDollar()
   p.ast.resolveComma()
 }
 
+// Get array out of a parser.
+// It actually returns slices, but easy to mashaled into JSON.
 func (p *Parser) ToArray() (out []interface{}) {
   return p.ast.toArray()
 }
