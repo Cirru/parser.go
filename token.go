@@ -18,3 +18,7 @@ func (t *Token) add(c rune) {
   str := string(c)
   t.text += str
 }
+
+func (t *Token) toJSON() string {
+  return t.text
+}

@@ -138,3 +138,10 @@ func (p *Parser) FormatAst() {
 func (p *Parser) Complete() {
   p.state.completeToken()
 }
+
+func (p *Parser) ToJSON() (out []interface{}) {
+  for _, child := range(*p.ast) {
+    out = append(out, child.toJSON())
+  }
+  return
+}

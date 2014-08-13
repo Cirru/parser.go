@@ -27,3 +27,16 @@ func (e *Expression) format() (out string) {
   out += ")"
   return
 }
+
+func (e *Expression) toJSON() (out []interface{}) {
+  for _, child := range(*e.list) {
+    if expr, ok := child.(*Expression); ok {
+      out = append(out, expr.toJSON())
+    } else if token, ok := child.(Token); ok {
+      out = append(out, token.toJSON())
+    } else {
+      panic("unexpected type got from AST")
+    }
+  }
+  return
+}
