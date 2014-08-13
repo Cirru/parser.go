@@ -6,7 +6,7 @@ type state struct {
   buffer *Token
   level int
   x, y int
-  history *[]interface{}
+  history *[]*Expression
   cursor *Expression
 }
 
@@ -64,6 +64,7 @@ func (s *state) completeString() {
 }
 
 func (s *state) pushStack() {
+  println("pushStack")
   s.name = stateToken
   list := &[]interface{}{}
   expr := &Expression{list}
@@ -73,14 +74,12 @@ func (s *state) pushStack() {
 }
 
 func (s *state) popStack() {
+  println("popStack")
   endIndex := len(*s.history) - 1
-  if expr, ok := (*s.history)[endIndex].(*Expression); ok {
-    s.name = stateToken
-    s.cursor = expr
-    *s.history = (*s.history)[:endIndex]
-  } else {
-    panic("got wrong thing from history")
-  }
+  expr := (*s.history)[endIndex]
+  s.name = stateToken
+  s.cursor = expr
+  *s.history = (*s.history)[:endIndex]
 }
 
 func (s *state) handleIndentation() {
@@ -121,4 +120,14 @@ func (s *state) beginNewline() {
 
 func (s *state) completeEscape() {
   s.name = stateString
+}
+
+func (s *state) getName() string {
+  switch s.name {
+  case 0: return "Indent"
+  case 1: return "Token"
+  case 2: return "String"
+  case 3: return "Escape"
+  }
+  return "<unknown>"
 }

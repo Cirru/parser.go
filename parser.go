@@ -12,7 +12,7 @@ func NewParser() Parser {
   emptyList := &[]interface{}{}
   firstExpr := &Expression{emptyList}
 
-  history := &[]interface{}{}
+  history := &[]*Expression{}
   *history = append(*history, firstExpr)
 
   list := &[]*Expression{}
@@ -30,11 +30,14 @@ func NewParser() Parser {
 }
 
 func (p *Parser) Read(c rune) {
-  // fmt.Printf("\n%v %s\n", p.state, string(c))
+  s := p.state
+  safeChar := fmt.Sprintf("%q", c)
+  safeBuffer := fmt.Sprintf("%q", string(s.buffer.text))
+  println(s.getName(), "\t", safeChar, "\t", safeBuffer)
   if c == NewLine {
-    p.state.countNewline()
+    s.countNewline()
   } else {
-    p.state.countLetter()
+    s.countLetter()
   }
   switch c {
   case NewLine: p.readNewline(c)

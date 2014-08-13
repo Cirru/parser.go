@@ -9,12 +9,12 @@ import (
 )
 
 func main() {
-  samples := []string{"comma",
+  samples := []string{"quote",
+    "comma",
     "folding",
     "indent",
     "line",
     "parentheses",
-    "quote",
     "spaces",
     "unfolding",
     "html",
