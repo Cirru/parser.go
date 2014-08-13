@@ -137,6 +137,10 @@ func (p *Parser) FormatAst() {
 
 func (p *Parser) Complete() {
   p.state.completeToken()
+  for _, expr := range(*p.ast) {
+    expr.resolveDollar()
+    expr.resolveComma()
+  }
 }
 
 func (p *Parser) ToJSON() (out []interface{}) {

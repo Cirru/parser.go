@@ -9,10 +9,6 @@ func (e *Expression) push(child interface{}) {
   *e.list = append(*e.list, child)
 }
 
-func (e *Expression) insert(child *Expression) {
-  *e.list = append(*e.list, child)
-}
-
 func (e *Expression) format() (out string) {
   out += "("
   for _, child := range(*e.list) {
@@ -29,6 +25,7 @@ func (e *Expression) format() (out string) {
 }
 
 func (e *Expression) toJSON() (out []interface{}) {
+  out = []interface{}{}
   for _, child := range(*e.list) {
     if expr, ok := child.(*Expression); ok {
       out = append(out, expr.toJSON())
@@ -39,4 +36,65 @@ func (e *Expression) toJSON() (out []interface{}) {
     }
   }
   return
+}
+
+func (e *Expression) resolveDollar() {
+  for i, child := range(*e.list) {
+    if expr, ok := child.(*Expression); ok {
+      expr.resolveDollar()
+    } else if token, ok := child.(Token); ok {
+      if token.text == string(Dollar) {
+        println("found Dollar")
+        former := (*e.list)[(i+1):]
+        childExpr := &Expression{&former}
+        childExpr.resolveDollar()
+        *e.list = append((*e.list)[:i], childExpr)
+        break
+      }
+    }
+  }
+}
+
+func (e *Expression) resolveComma() {
+  oldList := e.list
+  e.list = &[]interface{}{}
+  for i, child := range(*oldList) {
+    if expr, ok := child.(*Expression); ok {
+      if i == 0 {
+        expr.resolveComma()
+        e.push(expr)
+        continue
+      }
+      if expr.hasLeadingComma() {
+        expr.resolveComma()
+        for j, item := range(*expr.list) {
+          if j == 0 {
+            continue
+          }
+          if childExpr, ok := item.(*Expression); ok {
+            childExpr.resolveComma()
+            e.push(childExpr)
+          } else {
+            e.push(item)
+          }
+        }
+      } else {
+        expr.resolveComma()
+        e.push(expr)
+      }
+    } else {
+      e.push(child)
+    }
+  }
+}
+
+func (e *Expression) hasLeadingComma() bool {
+  if len(*e.list) == 0 {
+    return false
+  }
+  if token, ok := (*e.list)[0].(Token); ok {
+    return token.text == string(Comma)
+  } else {
+    return false
+  }
 }

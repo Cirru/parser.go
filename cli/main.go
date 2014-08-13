@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-  b, err := ioutil.ReadFile("../cirru/unfolding.cirru")
+  b, err := ioutil.ReadFile("../cirru/comma.cirru")
   if err != nil {
     panic(err)
   }

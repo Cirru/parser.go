@@ -68,7 +68,7 @@ func (s *state) pushStack() {
   list := &[]interface{}{}
   expr := &Expression{list}
   *s.history = append(*s.history, s.cursor)
-  s.cursor.insert(expr)
+  s.cursor.push(expr)
   s.cursor = expr
 }
 
