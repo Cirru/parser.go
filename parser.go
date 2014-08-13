@@ -9,20 +9,28 @@ type Parser struct {
 }
 
 func NewParser() Parser {
-  list := &[]*Expression{}
-  history := &[]interface{}{}
   emptyList := &[]interface{}{}
-  first := &Expression{emptyList}
-  *history = append(*history, first)
-  *list = append(*list, first)
+  firstExpr := &Expression{emptyList}
+
+  history := &[]interface{}{}
+  *history = append(*history, firstExpr)
+
+  list := &[]*Expression{}
+  *list = append(*list, firstExpr)
+
   mockToken := &Token{"", 1, 1, 1, 1}
-  initial := &state{stateIndent, mockToken, 0, 1, 1, history, first}
-  p := Parser{list, initial}
+  initialState := &state{stateIndent,
+    mockToken,
+    0, 1, 1,
+    history,
+    firstExpr,
+  }
+  p := Parser{list, initialState}
   return p
 }
 
 func (p *Parser) Read(c rune) {
-  fmt.Printf("\n%v %s\n", p.state, string(c))
+  // fmt.Printf("\n%v %s\n", p.state, string(c))
   if c == NewLine {
     p.state.countNewline()
   } else {

@@ -9,19 +9,40 @@ import (
 )
 
 func main() {
-  b, err := ioutil.ReadFile("../cirru/quote.cirru")
-  if err != nil {
-    panic(err)
+  samples := []string{"comma",
+    "folding",
+    "indent",
+    "line",
+    "parentheses",
+    "quote",
+    "spaces",
+    "unfolding",
+    "html",
+    "demo",
   }
-  parser := cirru.NewParser()
-  for _, c := range b {
-    parser.Read(rune(c))
-  }
-  parser.Complete()
 
-  content, err := json.MarshalIndent(parser.ToJSON(), "", "  ")
-  if err != nil {
-    fmt.Printf("error:", err)
+  for _, sample := range(samples) {
+    cirruFile := fmt.Sprintf("../cirru/%s.cirru", sample)
+    jsonFile := fmt.Sprintf("../ast/%s.json", sample)
+    b, _ := ioutil.ReadFile(cirruFile)
+    b2, _ := ioutil.ReadFile(jsonFile)
+    parser := cirru.NewParser()
+    for _, c := range b {
+      parser.Read(rune(c))
+    }
+    parser.Complete()
+
+    content, _ := json.MarshalIndent(parser.ToJSON(), "", "  ")
+    gotAst := string(content)
+    wantedAst := string(b2)
+
+    if gotAst != wantedAst {
+      println(sample, "-- not matching, break:")
+      println(gotAst)
+      break
+    } else {
+      println(sample, "-- matches")
+    }
+
   }
-  println(string(content))
 }
