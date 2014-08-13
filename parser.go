@@ -147,16 +147,12 @@ func (p *Parser) GetAst() {
   fmt.Printf("%v\n\n", *(p.ast))
 }
 
-func (p *Parser) FormatAst() {
-  println(p.ast.format())
-}
-
 func (p *Parser) Complete() {
   p.state.completeToken()
   p.ast.resolveDollar()
   p.ast.resolveComma()
 }
 
-func (p *Parser) ToJSON() (out []interface{}) {
-  return p.ast.toJSON()
+func (p *Parser) ToArray() (out []interface{}) {
+  return p.ast.toArray()
 }
