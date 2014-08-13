@@ -108,7 +108,7 @@ func (s *state) handleIndentation() {
   s.level = indented
 }
 
-func (s *state) completeSlash() {
+func (s *state) beginEscape() {
   s.name = stateEscape
 }
 
@@ -117,4 +117,8 @@ func (s *state) beginNewline() {
   buffer := s.buffer
   buffer.x, buffer.ex = s.x, s.x
   buffer.y, buffer.ey = s.y, s.y
+}
+
+func (s *state) completeEscape() {
+  s.name = stateString
 }

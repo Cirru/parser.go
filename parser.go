@@ -67,7 +67,10 @@ func (p *Parser) readCode(c rune) {
     s.handleIndentation()
     s.beginToken()
     s.addBuffer(c)
-  case stateString, stateEscape, stateToken: s.addBuffer(c)
+  case stateString, stateToken: s.addBuffer(c)
+  case stateEscape:
+    s.addBuffer(c)
+    s.completeEscape()
   }
 }
 
@@ -77,7 +80,10 @@ func (p *Parser) readParenLeft(c rune) {
   case stateIndent:
     s.handleIndentation()
     s.pushStack()
-  case stateString, stateEscape: s.addBuffer(c)
+  case stateString: s.addBuffer(c)
+  case stateEscape:
+    s.addBuffer(c)
+    s.completeEscape()
   case stateToken:
     s.completeToken()
     s.pushStack()
@@ -88,7 +94,10 @@ func (p *Parser) readParenRight(c rune) {
   s := p.state
   switch s.name {
   case stateIndent: panic("unexpected ParenRight at head")
-  case stateString, stateEscape: s.addBuffer(c)
+  case stateString: s.addBuffer(c)
+  case stateEscape:
+    s.addBuffer(c)
+    s.completeEscape()
   case stateToken:
     s.completeToken()
     s.popStack()
@@ -105,6 +114,7 @@ func (p *Parser) readQuote(c rune) {
     s.completeString()
   case stateEscape:
     s.addBuffer(c)
+    s.completeEscape()
   case stateToken:
     s.completeToken()
     s.beginString()
@@ -118,9 +128,10 @@ func (p *Parser) readBackslash(c rune) {
     s.handleIndentation()
     s.beginToken()
   case stateString:
-    s.completeSlash()
+    s.beginEscape()
   case stateEscape, stateToken:
     s.addBuffer(c)
+    s.completeEscape()
   }
 }
 
