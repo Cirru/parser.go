@@ -4,7 +4,7 @@ package cirru
 import "fmt"
 
 type Parser struct {
-  ast *[]*Expression
+  ast *Expression
   state *state
 }
 
@@ -13,10 +13,6 @@ func NewParser() Parser {
   firstExpr := &Expression{emptyList}
 
   history := &[]*Expression{}
-  *history = append(*history, firstExpr)
-
-  list := &[]*Expression{}
-  *list = append(*list, firstExpr)
 
   mockToken := &Token{"", 1, 1, 1, 1}
   initialState := &state{stateIndent,
@@ -25,15 +21,15 @@ func NewParser() Parser {
     history,
     firstExpr,
   }
-  p := Parser{list, initialState}
+  p := Parser{firstExpr, initialState}
   return p
 }
 
 func (p *Parser) Read(c rune) {
   s := p.state
-  safeChar := fmt.Sprintf("%q", c)
-  safeBuffer := fmt.Sprintf("%q", string(s.buffer.text))
-  println(s.getName(), "\t", safeChar, "\t", safeBuffer)
+  // safeChar := fmt.Sprintf("%q", c)
+  // safeBuffer := fmt.Sprintf("%q", string(s.buffer.text))
+  // println(s.getName(), "\t", safeChar, "\t", safeBuffer)
   if c == NewLine {
     s.countNewline()
   } else {
@@ -91,6 +87,7 @@ func (p *Parser) readParenLeft(c rune) {
   case stateIndent:
     s.handleIndentation()
     s.pushStack()
+    s.beginToken()
   case stateString: s.addBuffer(c)
   case stateEscape:
     s.addBuffer(c)
@@ -151,23 +148,15 @@ func (p *Parser) GetAst() {
 }
 
 func (p *Parser) FormatAst() {
-  for _, expr := range(*p.ast) {
-    fmt.Printf("%v", *expr)
-    println(expr.format())
-  }
+  println(p.ast.format())
 }
 
 func (p *Parser) Complete() {
   p.state.completeToken()
-  for _, expr := range(*p.ast) {
-    expr.resolveDollar()
-    expr.resolveComma()
-  }
+  p.ast.resolveDollar()
+  p.ast.resolveComma()
 }
 
 func (p *Parser) ToJSON() (out []interface{}) {
-  for _, child := range(*p.ast) {
-    out = append(out, child.toJSON())
-  }
-  return
+  return p.ast.toJSON()
 }

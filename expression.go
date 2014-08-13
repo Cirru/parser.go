@@ -44,7 +44,6 @@ func (e *Expression) resolveDollar() {
       expr.resolveDollar()
     } else if token, ok := child.(Token); ok {
       if token.text == string(Dollar) {
-        println("found Dollar")
         former := (*e.list)[(i+1):]
         childExpr := &Expression{&former}
         childExpr.resolveDollar()

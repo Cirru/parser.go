@@ -17,8 +17,8 @@ func main() {
     "parentheses",
     "spaces",
     "unfolding",
-    "html",
     "demo",
+    "html",
   }
 
   for _, sample := range(samples) {

@@ -64,7 +64,6 @@ func (s *state) completeString() {
 }
 
 func (s *state) pushStack() {
-  println("pushStack")
   s.name = stateToken
   list := &[]interface{}{}
   expr := &Expression{list}
@@ -74,7 +73,9 @@ func (s *state) pushStack() {
 }
 
 func (s *state) popStack() {
-  println("popStack")
+  if len(*s.history) == 0 {
+    return
+  }
   endIndex := len(*s.history) - 1
   expr := (*s.history)[endIndex]
   s.name = stateToken
@@ -100,6 +101,7 @@ func (s *state) handleIndentation() {
     for ; diff >= 0; diff -= 2 {
       s.popStack()
     }
+    s.pushStack()
   } else {
     s.popStack()
     s.pushStack()
