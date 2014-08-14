@@ -38,7 +38,7 @@ func (e *Expression) resolveDollar() {
     if expr, ok := child.(*Expression); ok {
       expr.resolveDollar()
     } else if token, ok := child.(Token); ok {
-      if token.getText() == string(Dollar) {
+      if token.getText() == string(dollar) {
         former := (*e.list)[(i+1):]
         childExpr := &Expression{&former}
         childExpr.resolveDollar()
@@ -87,7 +87,7 @@ func (e *Expression) hasLeadingComma() bool {
     return false
   }
   if token, ok := (*e.list)[0].(Token); ok {
-    return token.getText() == string(Comma)
+    return token.getText() == string(comma)
   } else {
     return false
   }

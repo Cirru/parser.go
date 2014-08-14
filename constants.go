@@ -1,17 +1,17 @@
 
 package cirru
 
-const NewLine = rune('\n')
-const Space = rune(' ')
+const newLine = rune('\n')
+const space = rune(' ')
 
-const ParenLeft = rune('(')
-const ParenRight = rune(')')
+const parenLeft = rune('(')
+const parenRight = rune(')')
 
-const Quote = rune('"')
-const Backslash = rune('\\')
+const quote = rune('"')
+const backslash = rune('\\')
 
-const Comma = rune(',')
-const Dollar = rune('$')
+const comma = rune(',')
+const dollar = rune('$')
 
 type stateName int
 

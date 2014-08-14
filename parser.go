@@ -32,18 +32,18 @@ func (p *Parser) Read(c rune) {
   // safeChar := fmt.Sprintf("%q", c)
   // safeBuffer := fmt.Sprintf("%q", string(s.buffer.text))
   // println(s.getName(), "\t", safeChar, "\t", safeBuffer)
-  if c == NewLine {
+  if c == newLine {
     s.countNewline()
   } else {
     s.countLetter()
   }
   switch c {
-  case NewLine: p.readNewline(c)
-  case Space: p.readSpace(c)
-  case ParenLeft: p.readParenLeft(c)
-  case ParenRight: p.readParenRight(c)
-  case Quote: p.readQuote(c)
-  case Backslash: p.readBackslash(c)
+  case newLine: p.readNewline(c)
+  case space: p.readSpace(c)
+  case parenLeft: p.readParenLeft(c)
+  case parenRight: p.readParenRight(c)
+  case quote: p.readQuote(c)
+  case backslash: p.readBackslash(c)
   default: p.readCode(c)
   }
 }
@@ -52,8 +52,8 @@ func (p *Parser) readNewline(c rune) {
   s := p.state
   switch s.name {
   case stateIndent: s.dropEmptyLine()
-  case stateString: panic("unexpected NewLine in string")
-  case stateEscape: panic("unexpected NewLine in escape")
+  case stateString: panic("unexpected newLine in string")
+  case stateEscape: panic("unexpected newLine in escape")
   case stateToken:
     s.completeToken()
     s.beginNewline()
