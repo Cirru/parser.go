@@ -153,8 +153,14 @@ func (p *Parser) Complete() {
   p.ast.resolveComma()
 }
 
-// Get array out of a parser.
+// Get array out of a parser with line numbers.
 // It actually returns slices, but easy to mashaled into JSON.
 func (p *Parser) ToArray() (out []interface{}) {
   return p.ast.toArray()
+}
+
+// Get array of tree with only text.
+// And it's easy to be converted to JSON.
+func (p *Parser) ToTree() (out []interface{}) {
+  return p.ast.toTree()
 }

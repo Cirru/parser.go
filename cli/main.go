@@ -32,7 +32,7 @@ func main() {
     }
     parser.Complete()
 
-    content, _ := json.MarshalIndent(parser.ToArray(), "", "  ")
+    content, _ := json.MarshalIndent(parser.ToTree(), "", "  ")
     gotAst := string(content)
     wantedAst := string(b2)
 

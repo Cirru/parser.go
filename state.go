@@ -29,17 +29,15 @@ func (s *state) dropEmptyLine() {
 func (s *state) beginToken() {
   s.name = stateToken
   buffer := s.buffer
-  buffer.x = s.x
-  buffer.ex = s.x
-  buffer.y = s.y
-  buffer.ey = s.y
-  buffer.text = ""
+  buffer.setXy(s.x, s.y)
+  buffer.setExy(s.x, s.y)
+  buffer.empty()
 }
 
 func (s *state) completeToken() {
   buffer := s.buffer
-  buffer.ex, buffer.ey = s.x, s.y
-  if len(buffer.text) > 0 {
+  buffer.setXy(s.x, s.y)
+  if buffer.len() > 0 {
     s.cursor.push(*buffer)
   }
   s.beginToken()
@@ -56,8 +54,8 @@ func (s *state) beginString() {
 
 func (s *state) completeString() {
   buffer := s.buffer
-  buffer.ex, buffer.ey = s.x, s.y
-  if len(buffer.text) > 0 {
+  buffer.setExy(s.y, s.y)
+  if len(buffer.getText()) > 0 {
     s.cursor.push(*buffer)
   }
   s.beginToken()
@@ -84,7 +82,7 @@ func (s *state) popStack() {
 }
 
 func (s *state) handleIndentation() {
-  indented := len(s.buffer.text)
+  indented := s.buffer.len()
   if indented > s.level {
     diff := indented - s.level
     if diff % 2 == 1 {
@@ -116,8 +114,8 @@ func (s *state) beginEscape() {
 func (s *state) beginNewline() {
   s.name = stateIndent
   buffer := s.buffer
-  buffer.x, buffer.ex = s.x, s.x
-  buffer.y, buffer.ey = s.y, s.y
+  buffer.setXy(s.x, s.y)
+  buffer.setExy(s.x, s.y)
 }
 
 func (s *state) completeEscape() {

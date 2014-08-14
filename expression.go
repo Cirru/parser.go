@@ -15,9 +15,19 @@ func (e *Expression) toArray() (out []interface{}) {
     if expr, ok := child.(*Expression); ok {
       out = append(out, expr.toArray())
     } else if token, ok := child.(Token); ok {
+      out = append(out, token)
+    }
+  }
+  return
+}
+
+func (e *Expression) toTree() (out []interface{}) {
+  out = []interface{}{}
+  for _, child := range(*e.list) {
+    if expr, ok := child.(*Expression); ok {
+      out = append(out, expr.toTree())
+    } else if token, ok := child.(Token); ok {
       out = append(out, token.getText())
-    } else {
-      panic("unexpected type got from AST")
     }
   }
   return
@@ -28,7 +38,7 @@ func (e *Expression) resolveDollar() {
     if expr, ok := child.(*Expression); ok {
       expr.resolveDollar()
     } else if token, ok := child.(Token); ok {
-      if token.text == string(Dollar) {
+      if token.getText() == string(Dollar) {
         former := (*e.list)[(i+1):]
         childExpr := &Expression{&former}
         childExpr.resolveDollar()
@@ -77,7 +87,7 @@ func (e *Expression) hasLeadingComma() bool {
     return false
   }
   if token, ok := (*e.list)[0].(Token); ok {
-    return token.text == string(Comma)
+    return token.getText() == string(Comma)
   } else {
     return false
   }

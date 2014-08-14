@@ -2,19 +2,36 @@
 package cirru
 
 type Token struct {
-  text string
-  x, y, ex, ey int
+  Text string `json:"text"`
+  X int `json:"x"`
+  Y int `json:"y"`
+  Ex int `json:"ex"`
+  Ey int `json:"ey"`
 }
 
 func (t *Token) empty() {
-  t.text = ""
+  t.Text = ""
 }
 
 func (t *Token) add(c rune) {
   str := string(c)
-  t.text += str
+  t.Text += str
 }
 
 func (t *Token) getText() string {
-  return t.text
+  return t.Text
+}
+
+func (t *Token) setXy(x, y int) {
+  t.X = x
+  t.Y = y
+}
+
+func (t *Token) setExy(x, y int) {
+  t.Ex = x
+  t.Ey = y
+}
+
+func (t *Token) len() int {
+  return len(t.Text)
 }
