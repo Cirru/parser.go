@@ -78,7 +78,14 @@ func (p *Parser) readCode(c rune) {
     s.addBuffer(c)
   case stateString, stateToken: s.addBuffer(c)
   case stateEscape:
-    s.addBuffer(c)
+    switch c {
+    case rune('n'): s.addBuffer(rune('\n'))
+    case rune('t'): s.addBuffer(rune('\t'))
+    case rune('b'): s.addBuffer(rune('\b'))
+    case rune('\\'): s.addBuffer(rune('\\'))
+    case rune('"'): s.addBuffer(rune('"'))
+    default: panic("not supported by parser")
+    }
     s.completeEscape()
   }
 }
