@@ -22,8 +22,8 @@ func main() {
   }
 
   for _, sample := range(samples) {
-    cirruFile := fmt.Sprintf("../cirru/%s.cirru", sample)
-    jsonFile := fmt.Sprintf("../ast/%s.json", sample)
+    cirruFile := fmt.Sprintf("./cirru/%s.cirru", sample)
+    jsonFile := fmt.Sprintf("./json/%s.json", sample)
     b, _ := ioutil.ReadFile(cirruFile)
     b2, _ := ioutil.ReadFile(jsonFile)
     parser := cirru.NewParser()
