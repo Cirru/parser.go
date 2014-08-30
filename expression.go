@@ -1,5 +1,5 @@
 
-package cirru
+package parser
 
 type Expression struct {
   list *[]interface{}

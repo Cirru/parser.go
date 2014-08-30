@@ -1,5 +1,5 @@
 
-package cirru
+package parser
 
 type Token struct {
   Text string `json:"text"`

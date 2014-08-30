@@ -1,5 +1,5 @@
 
-package cirru
+package parser
 
 // import "fmt"
 

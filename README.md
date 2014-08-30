@@ -10,12 +10,12 @@ You may also find one [writtern in CoffeeScript][parser].
 
 ### Usage
 
-[![GoDoc](https://godoc.org/github.com/Cirru/cirru-parser.go?status.png)](https://godoc.org/github.com/Cirru/cirru-parser.go)
+[![GoDoc](https://godoc.org/github.com/Cirru/parser?status.png)](https://godoc.org/github.com/Cirru/parser)
 
-You may find a complete demo at `cli/main.go`. Here is an overview.
+You may find a complete demo at `parser_test.go`. Here is an overview.
 
 ```go
-import "github.com/Cirru/cirru-parser.go"
+import "github.com/Cirru/parser"
 
 b, _ := ioutil.ReadFile("demo.cirru")
 

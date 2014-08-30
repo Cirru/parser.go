@@ -1,14 +1,14 @@
 
-package main
+package parser
 
 import (
+  "testing"
   "io/ioutil"
-  "github.com/Cirru/cirru-parser.go"
-  "fmt"
   "encoding/json"
+  "fmt"
 )
 
-func main() {
+func TestParser(t *testing.T) {
   samples := []string{"quote",
     "comma",
     "folding",
@@ -26,23 +26,28 @@ func main() {
     jsonFile := fmt.Sprintf("./json/%s.json", sample)
     b, _ := ioutil.ReadFile(cirruFile)
     b2, _ := ioutil.ReadFile(jsonFile)
-    parser := cirru.NewParser()
-    for _, c := range b {
-      parser.Read(rune(c))
-    }
-    parser.Complete()
 
-    content, _ := json.MarshalIndent(parser.ToTree(), "", "  ")
-    gotAst := string(content)
+    gotAst := ExampleNewParser(b)
     wantedAst := string(b2)
 
     if gotAst != wantedAst {
-      println(sample, "-- not matching, break:")
+      println(sample, "\t-- not matching, break:")
       println(gotAst)
-      break
+      return
     } else {
-      println(sample, "-- matches")
+      println(sample, "\t-- matches")
     }
 
   }
+}
+
+func ExampleNewParser(b []byte) string {
+  p := NewParser()
+  for _, c := range b {
+    p.Read(rune(c))
+  }
+  p.Complete()
+
+  content, _ := json.MarshalIndent(p.ToTree(), "", "  ")
+  return string(content)
 }

@@ -1,5 +1,5 @@
 
-package cirru
+package parser
 
 type state struct {
   name stateName

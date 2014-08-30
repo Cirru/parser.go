@@ -1,5 +1,5 @@
 
-package cirru
+package parser
 
 const newLine = rune('\n')
 const space = rune(' ')
