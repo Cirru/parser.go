@@ -15,12 +15,13 @@ func NewParser() Parser {
 
   history := &[]*Expression{}
 
-  mockToken := &Token{"", 1, 1, 1, 1}
+  mockToken := &Token{"", 1, 1, 1, 1, "<no name>"}
   initialState := &state{stateIndent,
     mockToken,
     0, 1, 1,
     history,
     firstExpr,
+    "<no name>",
   }
   p := Parser{firstExpr, initialState}
   return p
@@ -46,6 +47,13 @@ func (p *Parser) Read(c rune) {
   case backslash: p.readBackslash(c)
   default: p.readCode(c)
   }
+}
+
+// Specify a file name if you need to locate errors.
+// Remember to call it before parsing process begins.
+func (p *Parser) Filename(name string) {
+  p.state.file = name
+  p.state.buffer.File = name
 }
 
 func (p *Parser) readNewline(c rune) {

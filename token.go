@@ -7,6 +7,7 @@ type Token struct {
   Y int `json:"y"`
   Ex int `json:"ex"`
   Ey int `json:"ey"`
+  File string `json:"file"`
 }
 
 func (t *Token) empty() {

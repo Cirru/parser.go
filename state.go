@@ -8,6 +8,7 @@ type state struct {
   x, y int
   history *[]*Expression
   cursor *Expression
+  file string
 }
 
 // state names
@@ -49,7 +50,7 @@ func (s *state) addBuffer(c rune) {
 
 func (s *state) beginString() {
   s.name = stateString
-  s.buffer = &Token{"", s.x, s.y, s.x, s.y}
+  s.buffer = &Token{"", s.x, s.y, s.x, s.y, s.file}
 }
 
 func (s *state) completeString() {

@@ -20,6 +20,7 @@ You may find a complete demo at `parser_test.go`. Here is an overview.
 b, _ := ioutil.ReadFile("demo.cirru")
 
 p := parser.NewParser()
+p.Filename("_") // to specify filename
 for _, c := range b {
   p.Read(rune(c))
 }

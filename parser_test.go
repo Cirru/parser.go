@@ -43,6 +43,7 @@ func TestParser(t *testing.T) {
 
 func ExampleNewParser(b []byte) string {
   p := NewParser()
+  p.Filename("_")
   for _, c := range b {
     p.Read(rune(c))
   }
