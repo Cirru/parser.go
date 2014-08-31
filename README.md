@@ -15,18 +15,18 @@ You may also find one [writtern in CoffeeScript][parser].
 You may find a complete demo at `parser_test.go`. Here is an overview.
 
 ```go
-import "github.com/Cirru/parser"
+// import "github.com/Cirru/parser"
 
 b, _ := ioutil.ReadFile("demo.cirru")
 
-parser := cirru.NewParser()
+p := parser.NewParser()
 for _, c := range b {
-  parser.Read(rune(c))
+  p.Read(rune(c))
 }
-parser.Complete()
+p.Complete()
 
-content, _ := json.MarshalIndent(parser.ToArray(), "", "  ")
-gotAst := string(content)
+content, _ := json.MarshalIndent(p.ToTree(), "", "  ")
+string(content) // in JSON
 ```
 
 ### License
