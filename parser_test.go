@@ -9,7 +9,8 @@ import (
 )
 
 func TestParser(t *testing.T) {
-  samples := []string{"quote",
+  samples := []string{
+    "quote",
     "comma",
     "folding",
     "indent",
@@ -19,6 +20,7 @@ func TestParser(t *testing.T) {
     "unfolding",
     "demo",
     "html",
+    "slash",
   }
 
   for _, sample := range(samples) {

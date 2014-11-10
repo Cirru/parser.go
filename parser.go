@@ -154,9 +154,11 @@ func (p *Parser) readBackslash(c rune) {
     s.beginToken()
   case stateString:
     s.beginEscape()
-  case stateEscape, stateToken:
+  case stateEscape:
     s.addBuffer(c)
     s.completeEscape()
+  case stateToken:
+    s.addBuffer(c)
   }
 }
 
